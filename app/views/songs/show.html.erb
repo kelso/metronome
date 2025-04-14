@@ -1,0 +1,15 @@
+<h2><%= @song.name %></h2>
+<p><strong>BPM:</strong> <%= @song.bpm %></p>
+<p><strong>Time Signature:</strong> <%= @song.time_signature %></p>
+
+<div data-controller="metronome">
+  <input type="hidden" data-metronome-target="bpm" value="<%= @song.bpm %>">
+
+  <button data-action="click->metronome#start" data-metronome-target="startButton">
+    ▶️ Start
+  </button>
+
+  <button data-action="click->metronome#stop" data-metronome-target="stopButton">
+    ⏹ Stop
+  </button>
+</div>

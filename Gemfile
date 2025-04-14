@@ -49,6 +49,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -61,3 +63,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# gem 'tailwindcss-rails'
+# gem 'devise'
+# gem 'devise-i18n'
+gem "faker"
+# gem 'activestorage-validator'
+gem "inline_svg"

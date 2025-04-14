@@ -1,0 +1,14 @@
+<h2><%= @playlist.name %></h2>
+
+<h3>Songs</h3>
+
+<%= link_to "New Song", new_playlist_song_path(@playlist) %>
+
+<ul>
+  <% @playlist.songs.each do |song| %>
+    <li>
+      <%= link_to song.name, playlist_song_path(@playlist, song) %>
+      (<%= song.bpm %> BPM, <%= song.time_signature %>)
+    </li>
+  <% end %>
+</ul>
