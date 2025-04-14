@@ -2,14 +2,35 @@
 <p><strong>BPM:</strong> <%= @song.bpm %></p>
 <p><strong>Time Signature:</strong> <%= @song.time_signature %></p>
 
-<div data-controller="metronome">
+<div
+  data-controller="metronome"
+  data-metronome-playlist-id-value="<%= @playlist.id %>"
+  data-metronome-song-id-value="<%= @song.id %>"
+  data-metronome-songs-json-value="<%= @playlist.songs.order(:id).map { |s| { id: s.id, url: playlist_song_path(@playlist, s) } }.to_json %>"
+>
   <input type="hidden" data-metronome-target="bpm" value="<%= @song.bpm %>">
+  <input type="hidden" data-metronome-target="timeSignature" value="<%= @song.time_signature %>">
 
-  <button data-action="click->metronome#start" data-metronome-target="startButton">
-    ▶️ Start
+  <button
+    data-action="click->metronome#toggle"
+    data-metronome-target="toggleButton"
+    >
+    <span data-playing-hidden>▶️ Start</span>
+    <span data-playing-shown style="display: none;">⏹ Stop</span>
   </button>
 
-  <button data-action="click->metronome#stop" data-metronome-target="stopButton">
-    ⏹ Stop
-  </button>
+
+  <div class="mt-4">
+    <label for="volume">Volume</label>
+    <input
+      id="volume"
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value="1"
+      data-action="input->metronome#setVolume"
+      data-metronome-target="volume"
+    >
+  </div>
 </div>
