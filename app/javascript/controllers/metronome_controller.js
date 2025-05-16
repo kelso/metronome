@@ -13,10 +13,10 @@ export default class extends Controller {
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
     this.outputGain = this.audioContext.createGain()
 
-    const savedVolume = localStorage.getItem("metronome:volume")
-    const volume = savedVolume ? parseFloat(savedVolume) : 1
-    this.outputGain.gain.value = volume
-    if (this.hasVolumeTarget) this.volumeTarget.value = volume
+    const savedLinearVolume = parseFloat(localStorage.getItem("metronome:volume") || "1")
+    const gainValue = savedLinearVolume ** 2
+    this.outputGain.gain.value = gainValue
+    if (this.hasVolumeTarget) this.volumeTarget.value = savedLinearVolume
     this.outputGain.connect(this.audioContext.destination)
 
     this.currentBeat = 0
@@ -96,7 +96,7 @@ export default class extends Controller {
     const osc = this.audioContext.createOscillator()
     const envelope = this.audioContext.createGain()
 
-    osc.frequency.value = isAccented ? 1500 : 1000
+    osc.frequency.value = isAccented ? 2500 : 2000
     envelope.gain.value = 1
 
     osc.connect(envelope)
@@ -132,17 +132,19 @@ export default class extends Controller {
   }
 
   changeVolume(delta) {
-    let newVolume = this.outputGain.gain.value + delta
-    newVolume = Math.max(0, Math.min(1, newVolume))
-    this.outputGain.gain.value = newVolume
-    if (this.hasVolumeTarget) this.volumeTarget.value = newVolume
-    localStorage.setItem("metronome:volume", newVolume)
+    let linearVolume = parseFloat(this.volumeTarget?.value || Math.sqrt(this.outputGain.gain.value))
+    linearVolume = Math.max(0, Math.min(1, linearVolume + delta))
+    const gainValue = linearVolume ** 2
+    this.outputGain.gain.value = gainValue
+    if (this.hasVolumeTarget) this.volumeTarget.value = linearVolume
+    localStorage.setItem("metronome:volume", linearVolume)
   }
 
   setVolume(event) {
-    const value = parseFloat(event.target.value)
-    this.outputGain.gain.value = value
-    localStorage.setItem("metronome:volume", value)
+    const linearVolume = parseFloat(event.target.value)
+    const gainValue = linearVolume ** 2
+    this.outputGain.gain.value = gainValue
+    localStorage.setItem("metronome:volume", linearVolume)
   }
 
   _setButtonPlayingState(playing) {
