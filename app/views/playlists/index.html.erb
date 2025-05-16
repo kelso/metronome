@@ -1,11 +1,31 @@
-<h1>Playlists</h1>
+<div class="max-w-5xl mx-auto px-4 py-6">
+  <h1 class="text-2xl font-bold mb-4">Playlists</h1>
 
-<%= link_to "New Playlist", new_playlist_path %>
+  <%= link_to "➕ New Playlist", new_playlist_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
 
-<ul>
-  <% @playlists.each do |playlist| %>
-    <li>
-      <%= link_to playlist.name, playlist_path(playlist) %>
-    </li>
-  <% end %>
-</ul>
+  <table class="table-auto w-full mt-6 border-collapse">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="text-left p-2">Name</th>
+        <th class="text-left p-2">Created At</th>
+        <th class="text-left p-2">Updated At</th>
+        <th class="text-left p-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @playlists.each do |playlist| %>
+        <tr class="border-t hover:bg-gray-50">
+          <td class="p-2">
+            <%= link_to playlist.name, playlist_path(playlist), class: "text-blue-600 hover:underline" %>
+          </td>
+          <td class="p-2"><%= playlist.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td class="p-2"><%= playlist.updated_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td class="p-2 space-x-2">
+            <%= link_to "✏️ Edit", edit_playlist_path(playlist), class: "text-yellow-600 hover:underline" %>
+            <%= link_to "🗑 Delete", playlist_path(playlist), data: { turbo_method: :delete,  turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

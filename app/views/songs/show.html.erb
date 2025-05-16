@@ -1,36 +1,66 @@
-<h2><%= @song.name %></h2>
-<p><strong>BPM:</strong> <%= @song.bpm %></p>
-<p><strong>Time Signature:</strong> <%= @song.time_signature %></p>
+<div class="flex">
+  <!-- Sidebar -->
+  <aside class="w-64 border-r pr-4">
+    <h3 class="text-lg font-semibold mb-1">
+      <%= link_to @playlist.name, playlist_path(@playlist), class: "text-blue-600 hover:underline" %>
+    </h3>
+    <p class="text-sm text-gray-500 mb-3">Songs</p>
+    <ul class="space-y-1">
+      <% @playlist.songs.rank(:row_order).each do |song_item| %>
+        <li>
+          <%= link_to playlist_song_path(@playlist, song_item), class: "block px-2 py-1 rounded hover:bg-gray-100 #{'bg-blue-100 font-semibold' if song_item == @song}" do %>
+            <%= song_item.name %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </aside>
 
-<div
-  data-controller="metronome"
-  data-metronome-playlist-id-value="<%= @playlist.id %>"
-  data-metronome-song-id-value="<%= @song.id %>"
-  data-metronome-songs-json-value="<%= @playlist.songs.order(:id).map { |s| { id: s.id, url: playlist_song_path(@playlist, s) } }.to_json %>"
->
-  <input type="hidden" data-metronome-target="bpm" value="<%= @song.bpm %>">
-  <input type="hidden" data-metronome-target="timeSignature" value="<%= @song.time_signature %>">
+  <!-- Main content -->
+  <main class="flex-1 pl-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-2xl font-bold"><%= @song.name %></h2>
+        <p><strong>BPM:</strong> <%= @song.bpm %></p>
+        <p><strong>Time Signature:</strong> <%= @song.time_signature %></p>
+      </div>
+      <div class="space-x-2">
+        <%= link_to "✏️ Edit", edit_playlist_song_path(@playlist, @song), class: "text-yellow-600 hover:underline" %>
+        <%= link_to "← Back to Playlist", playlist_path(@playlist), class: "text-blue-600 hover:underline" %>
+      </div>
+    </div>
 
-  <button
-    data-action="click->metronome#toggle"
-    data-metronome-target="toggleButton"
+    <div
+      data-controller="metronome"
+      data-metronome-playlist-id-value="<%= @playlist.id %>"
+      data-metronome-song-id-value="<%= @song.id %>"
+      data-metronome-songs-json-value="<%= @playlist.songs.order(:row_order).map { |s| { id: s.id, url: playlist_song_path(@playlist, s) } }.to_json %>"
     >
-    <span data-playing-hidden>▶️ Start</span>
-    <span data-playing-shown style="display: none;">⏹ Stop</span>
-  </button>
+      <input type="hidden" data-metronome-target="bpm" value="<%= @song.bpm %>">
+      <input type="hidden" data-metronome-target="timeSignature" value="<%= @song.time_signature %>">
 
+      <button
+        data-action="click->metronome#toggle"
+        data-metronome-target="toggleButton"
+        class="bg-green-600 text-white px-4 py-2 rounded mt-4"
+      >
+        <span data-playing-hidden>▶️ Start</span>
+        <span data-playing-shown style="display: none;">⏹ Stop</span>
+      </button>
 
-  <div class="mt-4">
-    <label for="volume">Volume</label>
-    <input
-      id="volume"
-      type="range"
-      min="0"
-      max="1"
-      step="0.01"
-      value="1"
-      data-action="input->metronome#setVolume"
-      data-metronome-target="volume"
-    >
-  </div>
+      <div class="mt-4">
+        <label for="volume">Volume</label>
+        <input
+          id="volume"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="1"
+          data-action="input->metronome#setVolume"
+          data-metronome-target="volume"
+        >
+      </div>
+    </div>
+  </main>
 </div>

@@ -70,3 +70,4 @@ gem "tailwindcss-rails"
 gem "faker"
 # gem 'activestorage-validator'
 gem "inline_svg"
+gem "ranked-model"

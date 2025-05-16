@@ -1,0 +1,20 @@
+<%= form_with(model: [@playlist, @song], class: "space-y-4") do |f| %>
+  <div>
+    <%= f.label :name, class: "block font-medium" %>
+    <%= f.text_field :name, class: "mt-1 block w-full border rounded p-2" %>
+  </div>
+
+  <div>
+    <%= f.label :bpm, class: "block font-medium" %>
+    <%= f.number_field :bpm, min: 1, class: "mt-1 block w-full border rounded p-2" %>
+  </div>
+
+  <div>
+    <%= f.label :time_signature, class: "block font-medium" %>
+    <%= f.text_field :time_signature, placeholder: "e.g. 4/4", class: "mt-1 block w-full border rounded p-2" %>
+  </div>
+
+  <div>
+    <%= f.submit class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" %>
+  </div>
+<% end %>

@@ -1,6 +1,6 @@
 class SongsController < ApplicationController
   before_action :set_playlist
-  before_action :set_song, only: %i[show edit update destroy]
+  before_action :set_song, only: %i[show edit update destroy move_up move_down]
 
   def show; end
 
@@ -30,6 +30,16 @@ class SongsController < ApplicationController
   def destroy
     @song.destroy
     redirect_to playlist_path(@playlist), notice: "Song deleted."
+  end
+
+  def move_up
+    @song.update row_order_position: :up
+    redirect_to playlist_path(@playlist)
+  end
+
+  def move_down
+    @song.update row_order_position: :down
+    redirect_to playlist_path(@playlist)
   end
 
   private

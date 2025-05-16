@@ -6,7 +6,7 @@ class PlaylistsController < ApplicationController
   end
 
   def show
-    @songs = @playlist.songs
+    @songs = @playlist.songs.rank(:row_order)
   end
 
   def new
