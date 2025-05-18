@@ -18,6 +18,13 @@ Rails.application.routes.draw do
         patch :move_up
         patch :move_down
       end
+
+      resources :assets do
+        member do
+          patch :move_up
+          patch :move_down
+        end
+      end
     end
   end
 

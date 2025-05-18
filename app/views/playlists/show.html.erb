@@ -39,6 +39,7 @@
           </td>
           <td class="p-2 space-x-2">
             <%= link_to "✏️ Edit", edit_playlist_song_path(@playlist, song), class: "text-yellow-600 hover:underline" %>
+            <%= link_to "🎵 Manage Assets", playlist_song_assets_path(@playlist, song), class: "text-green-600 hover:underline" %>
             <%= link_to "🗑 Delete", playlist_song_path(@playlist, song), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
           </td>
         </tr>

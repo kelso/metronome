@@ -1,0 +1,25 @@
+<div class="max-w-xl mx-auto px-4 py-6">
+  <h1 class="text-2xl font-bold mb-4">Edit Asset for <%= @song.name %></h1>
+  <%= link_to "← Back to Assets", playlist_song_assets_path(@playlist, @song), class: "text-blue-600 hover:underline mb-4 block" %>
+
+  <%= form_with(model: [@playlist, @song, @asset], local: true, html: { multipart: true }) do |f| %>
+    <div class="mb-2">
+      <%= f.label :name, "Description/Name", class: "block font-medium" %>
+      <%= f.text_field :name, class: "mt-1 block w-full border rounded p-2", value: @asset.name %>
+    </div>
+    <div class="mb-2">
+      <%= f.label :file, "Audio File", class: "block font-medium" %>
+      <% if @asset.file.attached? %>
+        <p class="mb-1 text-sm text-gray-600">Current: <%= @asset.file.filename %></p>
+        <audio controls style="height: 32px;">
+          <source src="<%= url_for(@asset.file) %>" type="<%= @asset.file.content_type %>">
+        </audio>
+      <% end %>
+      <%= f.file_field :file, class: "mt-1 block w-full border rounded p-2" %>
+      <p class="text-xs text-gray-500">Leave blank to keep current file.</p>
+    </div>
+    <div>
+      <%= f.submit "Save Changes", class: "bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700" %>
+    </div>
+  <% end %>
+</div>
