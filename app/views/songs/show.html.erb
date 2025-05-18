@@ -65,23 +65,32 @@
     </div>
 
     <% if @song.assets.any? %>
-      <div class="mt-6">
-        <h3 class="text-lg font-semibold mb-2">Song Reference Tracks</h3>
-        <ul class="space-y-3">
-          <% @song.assets.rank(:row_order).each do |asset| %>
-            <li class="flex items-center space-x-4">
-              <span class="min-w-24 text-gray-700"><%= asset.name.presence || "Track" %></span>
-              <% if asset.file.attached? %>
-                <audio controls style="height: 32px;">
-                  <source src="<%= url_for(asset.file) %>" type="<%= asset.file.content_type %>">
-                  Your browser does not support the audio element.
-                </audio>
-              <% else %>
-                <span class="text-gray-400">No audio file</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
+      <div data-controller="song-assets-hint">
+        <div class="mt-6">
+          <h3 class="text-lg font-semibold mb-2">Song Reference Tracks</h3>
+          <ul class="space-y-3">
+            <% @song.assets.rank(:row_order).each do |asset| %>
+              <li class="flex items-center space-x-4">
+                <span class="min-w-24 text-gray-700"><%= asset.name.presence || "Track" %></span>
+                <% if asset.file.attached? %>
+                  <audio
+                    controls
+                    style="height: 32px;"
+                    data-song-assets-hint-target="audio"
+                  >
+                    <source src="<%= url_for(asset.file) %>" type="<%= asset.file.content_type %>">
+                    Your browser does not support the audio element.
+                  </audio>
+                <% else %>
+                  <span class="text-gray-400">No audio file</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+          <div class="text-xs text-gray-500 mt-2">
+            Keyboard shortcuts: <strong>1–9</strong> = play reference, <strong>S</strong> = stop all
+          </div>
+        </div>
       </div>
     <% end %>
   </main>
