@@ -23,12 +23,6 @@
         <h2 class="text-2xl font-bold"><%= @song.name %></h2>
         <p><strong>BPM:</strong> <%= @song.bpm %></p>
         <p><strong>Time Signature:</strong> <%= @song.time_signature %></p>
-        <% if @song.lyrics.present? %>
-          <div class="mt-4">
-            <h3 class="text-lg font-semibold mb-1">Lyrics</h3>
-            <pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded border"><%= @song.lyrics %></pre>
-          </div>
-        <% end %>
       </div>
       <div class="space-x-2">
         <%= link_to "✏️ Edit", edit_playlist_song_path(@playlist, @song), class: "text-yellow-600 hover:underline" %>
@@ -36,6 +30,13 @@
         <%= link_to "← Back to Playlist", playlist_path(@playlist), class: "text-blue-600 hover:underline" %>
       </div>
     </div>
+
+    <% if @song.lyrics.present? %>
+      <div class="mb-6" data-controller="lyrics">
+        <h3 class="text-lg font-semibold mb-1">Lyrics</h3>
+        <pre data-lyrics-target="container" class="whitespace-pre-wrap bg-gray-50 p-4 rounded border overflow-y-auto text-2xl h-[calc(2rem*10)]"><%= @song.lyrics %></pre>
+      </div>
+    <% end %>
 
     <div
       data-controller="metronome"
