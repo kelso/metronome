@@ -187,6 +187,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.7-arm-linux-musl)
       racc (~> 1.4)
+    nokogiri (1.18.7-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.18.7-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.7-x86_64-linux-musl)
@@ -330,11 +332,13 @@ GEM
     tailwindcss-ruby (4.1.7)
     tailwindcss-ruby (4.1.7-aarch64-linux-gnu)
     tailwindcss-ruby (4.1.7-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.7-arm64-darwin)
     tailwindcss-ruby (4.1.7-x86_64-linux-gnu)
     tailwindcss-ruby (4.1.7-x86_64-linux-musl)
     thor (1.3.2)
     thruster (0.1.12)
     thruster (0.1.12-aarch64-linux)
+    thruster (0.1.12-arm64-darwin)
     thruster (0.1.12-x86_64-linux)
     timeout (0.4.3)
     turbo-rails (2.0.13)
@@ -366,6 +370,7 @@ PLATFORMS
   aarch64-linux-musl
   arm-linux-gnu
   arm-linux-musl
+  arm64-darwin-25
   x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
