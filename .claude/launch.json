@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rails",
+      "runtimeExecutable": "/Users/sh/.local/bin/mise",
+      "runtimeArgs": ["exec", "--", "env", "PORT=3001", "bin/dev"],
+      "port": 3001
+    }
+  ]
+}

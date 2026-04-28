@@ -1,2 +1,2 @@
-web: bin/rails server
+web: bin/rails server -P tmp/pids/server-$PORT.pid
 css: bin/rails tailwindcss:watch
