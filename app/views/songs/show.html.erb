@@ -1,28 +1,54 @@
 <% playlist_songs = @playlist.songs.rank(:row_order).to_a %>
 
-<div class="grid gap-5 lg:grid-cols-[14rem_18rem_minmax(0,1fr)]">
-  <aside class="panel flex flex-col p-4">
-    <div class="mb-5 flex items-center justify-between">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-300">Playlists</h2>
-      <%= link_to "＋", new_playlist_path, class: "btn-outline px-2 py-1", title: "New Playlist" %>
+<div data-controller="playlist-rail" class="grid gap-5 lg:grid-cols-[3.75rem_20rem_minmax(0,1fr)]">
+  <aside data-playlist-rail-target="panel" class="panel flex flex-col p-2">
+    <div class="mb-5 flex items-center justify-center gap-2">
+      <h2 data-playlist-rail-target="expanded" class="hidden flex-1 text-sm font-semibold uppercase tracking-wide text-slate-300">Playlists</h2>
+      <button
+        type="button"
+        data-action="click->playlist-rail#toggle"
+        data-playlist-rail-target="toggle"
+        class="grid size-9 shrink-0 place-items-center rounded-lg border border-slate-700 bg-slate-950/30 text-lg font-semibold leading-none text-slate-200 transition hover:border-sky-500/60 hover:bg-sky-500/10 hover:text-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+        aria-expanded="false"
+        title="Expand playlists"
+      >
+        <span data-playlist-rail-target="collapsed">☰</span>
+        <span data-playlist-rail-target="expanded" class="hidden" aria-hidden="true">
+          <svg class="size-4" viewBox="0 0 20 20" fill="none">
+            <path d="M12 5L7 10L12 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+      </button>
+      <%= link_to new_playlist_path, class: "hidden grid size-9 shrink-0 place-items-center rounded-lg border border-slate-700 bg-slate-950/30 text-slate-200 transition hover:border-sky-500/60 hover:bg-sky-500/10 hover:text-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400/40", title: "New Playlist", data: { playlist_rail_target: "expanded" } do %>
+        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        </svg>
+      <% end %>
     </div>
 
     <nav class="space-y-1">
-      <%= link_to playlists_path, class: "rail-item" do %>
-        <span>All Playlists</span>
-        <span class="text-xs text-slate-500"><%= @navigation_playlists.size %></span>
+      <%= link_to playlists_path, class: "rail-item justify-center px-2", data: { playlist_rail_target: "item" } do %>
+        <span data-playlist-rail-target="collapsed" class="font-semibold">≡</span>
+        <span data-playlist-rail-target="expanded" class="hidden">All Playlists</span>
+        <span data-playlist-rail-target="expanded" class="hidden text-xs text-slate-500"><%= @navigation_playlists.size %></span>
       <% end %>
 
       <% @navigation_playlists.each do |playlist| %>
-        <%= link_to playlist_path(playlist), class: "rail-item #{'rail-item-active' if playlist == @playlist}" do %>
-          <span class="truncate"><%= playlist.name %></span>
-          <span class="ml-3 text-xs text-slate-500"><%= playlist.songs.size %></span>
+        <%= link_to playlist_path(playlist), class: "rail-item justify-center px-2 #{'rail-item-active' if playlist == @playlist}", data: { playlist_rail_target: "item" } do %>
+          <span data-playlist-rail-target="collapsed" class="font-semibold"><%= playlist.name.first&.upcase || "P" %></span>
+          <span data-playlist-rail-target="expanded" class="hidden truncate"><%= playlist.name %></span>
+          <span data-playlist-rail-target="expanded" class="ml-3 hidden text-xs text-slate-500"><%= playlist.songs.size %></span>
         <% end %>
       <% end %>
     </nav>
 
     <div class="mt-6 border-t border-slate-800 pt-4">
-      <%= link_to "＋ New Playlist", new_playlist_path, class: "btn-outline w-full justify-center" %>
+      <%= link_to new_playlist_path, class: "mx-auto grid size-9 place-items-center rounded-lg border border-slate-700 bg-slate-950/30 text-slate-200 transition hover:border-sky-500/60 hover:bg-sky-500/10 hover:text-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400/40", title: "New Playlist", data: { playlist_rail_target: "collapsed" } do %>
+        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        </svg>
+      <% end %>
+      <%= link_to "＋ New Playlist", new_playlist_path, class: "btn-outline hidden w-full justify-center", data: { playlist_rail_target: "expanded" } %>
     </div>
   </aside>
 
