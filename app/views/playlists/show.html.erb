@@ -1,19 +1,19 @@
-<div class="max-w-5xl mx-auto px-4 py-6">
+<div class="mx-auto max-w-5xl">
   <div class="flex items-center justify-between mb-4">
-    <h2 class="text-2xl font-bold"><%= @playlist.name %></h2>
+    <h2 class="text-2xl font-bold text-slate-50"><%= @playlist.name %></h2>
     <div class="space-x-2">
-      <%= link_to "✏️ Edit Playlist", edit_playlist_path(@playlist), class: "text-yellow-600 hover:underline" %>
-      <%= link_to "← Back to Playlists", playlists_path, class: "text-blue-600 hover:underline" %>
+      <%= link_to "✏️ Edit Playlist", edit_playlist_path(@playlist), class: "link-edit" %>
+      <%= link_to "← Back to Playlists", playlists_path, class: "link-primary" %>
     </div>
   </div>
 
-  <%= link_to "➕ New Song", new_playlist_song_path(@playlist), class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  <%= link_to "➕ New Song", new_playlist_song_path(@playlist), class: "btn-primary" %>
 
-  <h3 class="text-xl font-semibold mt-6 mb-2">Songs</h3>
+  <h3 class="text-xl font-semibold mt-6 mb-2 text-slate-100">Songs</h3>
 
-  <table class="table-auto w-full border-collapse">
+  <table class="table-shell table-auto border-collapse">
     <thead>
-      <tr class="bg-gray-100">
+      <tr class="table-head-row">
         <th class="text-left p-2">Name</th>
         <th class="text-left p-2">BPM</th>
         <th class="text-left p-2">Time Signature</th>
@@ -23,24 +23,24 @@
     </thead>
     <tbody>
       <% @songs.each_with_index do |song, index| %>
-        <tr class="border-t hover:bg-gray-50">
+        <tr class="table-row">
           <td class="p-2">
-            <%= link_to song.name, playlist_song_path(@playlist, song), class: "text-blue-600 hover:underline" %>
+            <%= link_to song.name, playlist_song_path(@playlist, song), class: "link-primary" %>
           </td>
           <td class="p-2"><%= song.bpm %></td>
           <td class="p-2"><%= song.time_signature %></td>
           <td class="p-2 space-x-2">
             <% if index > 0 %>
-              <%= link_to "⬆", move_up_playlist_song_path(@playlist, song), data: { turbo_method: :patch }, title: "Move Up", class: "hover:text-blue-600" %>
+              <%= link_to "⬆", move_up_playlist_song_path(@playlist, song), data: { turbo_method: :patch }, title: "Move Up", class: "text-slate-400 transition hover:text-sky-300" %>
             <% end %>
             <% if index < @songs.size - 1 %>
-              <%= link_to "⬇", move_down_playlist_song_path(@playlist, song), data: { turbo_method: :patch }, title: "Move Down", class: "hover:text-blue-600" %>
+              <%= link_to "⬇", move_down_playlist_song_path(@playlist, song), data: { turbo_method: :patch }, title: "Move Down", class: "text-slate-400 transition hover:text-sky-300" %>
             <% end %>
           </td>
           <td class="p-2 space-x-2">
-            <%= link_to "✏️ Edit", edit_playlist_song_path(@playlist, song), class: "text-yellow-600 hover:underline" %>
-            <%= link_to "🎵 Manage Assets", playlist_song_assets_path(@playlist, song), class: "text-green-600 hover:underline" %>
-            <%= link_to "🗑 Delete", playlist_song_path(@playlist, song), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:underline" %>
+            <%= link_to "✏️ Edit", edit_playlist_song_path(@playlist, song), class: "link-edit" %>
+            <%= link_to "🎵 Manage Assets", playlist_song_assets_path(@playlist, song), class: "link-success" %>
+            <%= link_to "🗑 Delete", playlist_song_path(@playlist, song), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "link-danger" %>
           </td>
         </tr>
       <% end %>
