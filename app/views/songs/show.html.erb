@@ -1,110 +1,181 @@
-<div class="grid gap-6 lg:grid-cols-[16rem_1fr]">
-  <!-- Sidebar -->
-  <aside class="panel p-4">
-    <h3 class="text-lg font-semibold mb-1">
-      <%= link_to @playlist.name, playlist_path(@playlist), class: "link-primary" %>
-    </h3>
-    <p class="text-sm muted-text mb-3">Songs</p>
-    <ul class="space-y-1">
-      <% @playlist.songs.rank(:row_order).each do |song_item| %>
-        <li>
-          <%= link_to playlist_song_path(@playlist, song_item), class: "block rounded-lg px-3 py-2 text-sm transition hover:bg-slate-800/70 #{'border border-sky-400/40 bg-sky-500/15 font-semibold text-sky-100' if song_item == @song}" do %>
-            <%= song_item.name %>
-          <% end %>
-        </li>
+<% playlist_songs = @playlist.songs.rank(:row_order).to_a %>
+
+<div class="grid gap-5 lg:grid-cols-[14rem_18rem_minmax(0,1fr)]">
+  <aside class="panel flex flex-col p-4">
+    <div class="mb-5 flex items-center justify-between">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-300">Playlists</h2>
+      <%= link_to "＋", new_playlist_path, class: "btn-outline px-2 py-1", title: "New Playlist" %>
+    </div>
+
+    <nav class="space-y-1">
+      <%= link_to playlists_path, class: "rail-item" do %>
+        <span>All Playlists</span>
+        <span class="text-xs text-slate-500"><%= @navigation_playlists.size %></span>
       <% end %>
-    </ul>
+
+      <% @navigation_playlists.each do |playlist| %>
+        <%= link_to playlist_path(playlist), class: "rail-item #{'rail-item-active' if playlist == @playlist}" do %>
+          <span class="truncate"><%= playlist.name %></span>
+          <span class="ml-3 text-xs text-slate-500"><%= playlist.songs.size %></span>
+        <% end %>
+      <% end %>
+    </nav>
+
+    <div class="mt-6 border-t border-slate-800 pt-4">
+      <%= link_to "＋ New Playlist", new_playlist_path, class: "btn-outline w-full justify-center" %>
+    </div>
   </aside>
 
-  <!-- Main content -->
-  <section class="min-w-0">
-    <div class="mb-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-      <div>
-        <h2 class="text-3xl font-bold tracking-normal text-slate-50"><%= @song.name %></h2>
-        <div class="mt-2 flex flex-wrap gap-4 text-sm text-slate-300">
-          <p><strong class="text-slate-100">BPM:</strong> <%= @song.bpm %></p>
-          <p><strong class="text-slate-100">Time Signature:</strong> <%= @song.time_signature %></p>
+  <aside class="panel overflow-hidden">
+    <div class="border-b border-slate-800 p-4">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-300">Songs in <%= @playlist.name %></h2>
+          <p class="mt-1 text-sm text-slate-500"><%= playlist_songs.size %> songs</p>
         </div>
-      </div>
-      <div class="flex flex-wrap gap-x-3 gap-y-2 text-sm">
-        <%= link_to "✏️ Edit", edit_playlist_song_path(@playlist, @song), class: "link-edit" %>
-        <%= link_to "🎵 Manage Assets", playlist_song_assets_path(@playlist, @song), class: "link-success" %>
-        <%= link_to "← Back to Playlist", playlist_path(@playlist), class: "link-primary" %>
+        <%= link_to "＋ Add Song", new_playlist_song_path(@playlist), class: "btn-outline shrink-0" %>
       </div>
     </div>
 
-    <% if @song.lyrics.present? %>
-      <div class="mb-6" data-controller="lyrics">
-        <h3 class="text-lg font-semibold mb-2 text-slate-100">Lyrics</h3>
-        <pre data-lyrics-target="container" class="panel h-[calc(2rem*10)] overflow-y-auto whitespace-pre-wrap p-4 font-mono text-2xl leading-8 text-slate-100"><%= @song.lyrics %></pre>
+    <div class="divide-y divide-slate-800">
+      <% playlist_songs.each_with_index do |song_item, index| %>
+        <%= link_to playlist_song_path(@playlist, song_item), class: "grid grid-cols-[2rem_1fr_3rem_3rem] items-center gap-2 px-4 py-3 text-sm transition hover:bg-slate-800/60 #{'bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-400/40' if song_item == @song}" do %>
+          <span class="text-slate-500"><%= index + 1 %></span>
+          <span class="truncate font-medium"><%= song_item.name %></span>
+          <span class="text-right text-slate-400"><%= song_item.bpm %></span>
+          <span class="text-right text-slate-400"><%= song_item.time_signature.presence || "—" %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </aside>
+
+  <section class="min-w-0">
+    <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold tracking-normal text-slate-50"><%= @song.name %></h1>
+        <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-400">
+          <span>Playlist: <%= @playlist.name %></span>
+          <span class="text-slate-700">•</span>
+          <span>Time: <%= @song.time_signature.presence || "—" %></span>
+        </div>
       </div>
-    <% end %>
+
+      <div class="flex flex-wrap gap-2">
+        <%= link_to "✎ Edit Song", edit_playlist_song_path(@playlist, @song), class: "btn-outline border-amber-400/30 text-amber-300 hover:bg-amber-500/10 hover:text-amber-200" %>
+        <%= link_to "♪ Manage Assets", playlist_song_assets_path(@playlist, @song), class: "btn-outline border-emerald-400/30 text-emerald-300 hover:bg-emerald-500/10 hover:text-emerald-200" %>
+        <%= link_to "← Back", playlist_path(@playlist), class: "btn-outline" %>
+      </div>
+    </div>
 
     <div
       data-controller="metronome"
       data-metronome-playlist-id-value="<%= @playlist.id %>"
       data-metronome-song-id-value="<%= @song.id %>"
-      data-metronome-songs-json-value="<%= @playlist.songs.order(:row_order).map { |s| { id: s.id, url: playlist_song_path(@playlist, s) } }.to_json %>"
+      data-metronome-songs-json-value="<%= playlist_songs.map { |s| { id: s.id, url: playlist_song_path(@playlist, s) } }.to_json %>"
     >
       <input type="hidden" data-metronome-target="bpm" value="<%= @song.bpm %>">
       <input type="hidden" data-metronome-target="timeSignature" value="<%= @song.time_signature %>">
 
-      <div class="panel mb-6 flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          data-action="click->metronome#toggle"
-          data-metronome-target="toggleButton"
-          class="btn-success"
-        >
-          <span data-playing-hidden>▶️ Start</span>
-          <span data-playing-shown style="display: none;">⏹ Stop</span>
-        </button>
-
-        <div class="flex flex-1 items-center gap-3 sm:max-w-md">
-          <label for="volume" class="text-sm font-medium text-slate-300">Volume</label>
-          <input
-            id="volume"
-            class="w-full"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value="1"
-            data-action="input->metronome#setVolume"
-            data-metronome-target="volume"
+      <div class="panel mb-5 p-4">
+        <div class="grid gap-4 lg:grid-cols-[9.5rem_1fr] lg:items-stretch">
+          <button
+            data-action="click->metronome#toggle"
+            data-metronome-target="toggleButton"
+            class="inline-flex h-full min-h-24 w-full items-center justify-center rounded-lg border border-sky-300/30 bg-sky-500 px-8 text-base font-bold uppercase tracking-wide text-white shadow-lg shadow-sky-950/40 transition hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-300/50"
           >
+            <span data-playing-hidden>▶ Start</span>
+            <span data-playing-shown style="display: none;">■ Stop</span>
+          </button>
+
+          <div class="grid gap-3 md:grid-cols-4">
+            <div class="metric-tile">
+              <div class="metric-label">BPM</div>
+              <div class="metric-value"><%= @song.bpm %></div>
+            </div>
+            <div class="metric-tile">
+              <div class="metric-label">Time Signature</div>
+              <div class="metric-value"><%= @song.time_signature.presence || "—" %></div>
+            </div>
+            <div class="metric-tile">
+              <div class="metric-label">Accent</div>
+              <div class="metric-value">1</div>
+            </div>
+            <div class="metric-tile">
+              <label for="volume" class="metric-label">Volume</label>
+              <input
+                id="volume"
+                class="mt-3 w-full"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value="1"
+                data-action="input->metronome#setVolume"
+                data-metronome-target="volume"
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <% if @song.assets.any? %>
-      <div data-controller="song-assets-hint">
-        <div class="panel mt-6 p-4">
-          <h3 class="text-lg font-semibold mb-3 text-slate-100">Song Reference Tracks</h3>
-          <ul class="divide-y divide-slate-800">
-            <% @song.assets.rank(:row_order).each do |asset| %>
-              <li class="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:gap-4">
-                <span class="min-w-24 text-sm font-medium text-slate-300"><%= asset.name.presence || "Track" %></span>
-                <% if asset.file.attached? %>
-                  <audio
-                    controls
-                    class="w-full sm:flex-1"
-                    style="height: 32px;"
-                    data-song-assets-hint-target="audio"
-                  >
-                    <source src="<%= url_for(asset.file) %>" type="<%= asset.file.content_type %>">
-                    Your browser does not support the audio element.
-                  </audio>
-                <% else %>
-                  <span class="muted-text">No audio file</span>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
-          <div class="muted-text mt-3 text-xs">
-            Keyboard shortcuts: <strong>1–9</strong> = play reference, <strong>S</strong> = stop all
-          </div>
+    <% if @song.lyrics.present? %>
+      <div class="panel mb-5 overflow-hidden" data-controller="lyrics">
+        <div class="flex items-center justify-between border-b border-slate-800 px-4 py-3">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-300">Lyrics</h2>
+          <%= link_to "✎ Edit Lyrics", edit_playlist_song_path(@playlist, @song), class: "link-edit text-sm" %>
         </div>
+        <pre data-lyrics-target="container" class="h-[24rem] overflow-y-auto whitespace-pre-wrap bg-slate-950/20 p-5 font-mono text-lg leading-8 text-slate-100 sm:text-xl"><%= @song.lyrics %></pre>
       </div>
     <% end %>
+
+    <div class="panel overflow-hidden" data-controller="song-assets-hint">
+      <div class="flex flex-col gap-3 border-b border-slate-800 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-300">Reference Tracks</h2>
+          <p class="mt-1 text-xs text-slate-500">Keyboard shortcuts: <strong>1–9</strong> = play reference, <strong>S</strong> = stop all</p>
+        </div>
+        <%= link_to "＋ Add Track", playlist_song_assets_path(@playlist, @song), class: "link-success text-sm font-semibold" %>
+      </div>
+
+      <% if @song.assets.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full table-auto border-collapse">
+            <thead>
+              <tr class="table-head-row">
+                <th class="w-10 p-3 text-left">#</th>
+                <th class="p-3 text-left">Title</th>
+                <th class="p-3 text-left">Audio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @song.assets.rank(:row_order).each_with_index do |asset, index| %>
+                <tr class="table-row">
+                  <td class="p-3 text-slate-500"><%= index + 1 %></td>
+                  <td class="p-3 font-medium text-slate-200"><%= asset.name.presence || "Track" %></td>
+                  <td class="p-3">
+                    <% if asset.file.attached? %>
+                      <audio
+                        controls
+                        class="w-full min-w-64"
+                        style="height: 32px;"
+                        data-song-assets-hint-target="audio"
+                      >
+                        <source src="<%= url_for(asset.file) %>" type="<%= asset.file.content_type %>">
+                        Your browser does not support the audio element.
+                      </audio>
+                    <% else %>
+                      <span class="muted-text">No audio file</span>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="px-4 py-6 text-sm text-slate-400">No reference tracks yet.</div>
+      <% end %>
+    </div>
   </section>
 </div>

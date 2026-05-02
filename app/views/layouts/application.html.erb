@@ -23,6 +23,30 @@
   </head>
 
   <body class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="flex items-center gap-8">
+          <%= link_to playlists_path, class: "flex items-center gap-3 text-slate-50" do %>
+            <span class="brand-mark">M</span>
+            <span class="text-lg font-bold">Metronome Pro</span>
+          <% end %>
+
+          <nav class="hidden items-center gap-1 sm:flex">
+            <%= link_to "Playlists", playlists_path, class: "nav-link nav-link-active" %>
+            <% if defined?(@playlist) && @playlist&.persisted? %>
+              <%= link_to "Songs", playlist_path(@playlist), class: "nav-link" %>
+            <% else %>
+              <span class="nav-link">Songs</span>
+            <% end %>
+          </nav>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <%= link_to "＋ New Playlist", new_playlist_path, class: "btn-outline hidden sm:inline-flex" %>
+        </div>
+      </div>
+    </header>
+
     <main class="page-container">
       <%= yield %>
     </main>
