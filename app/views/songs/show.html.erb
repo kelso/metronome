@@ -75,7 +75,7 @@
     </div>
   </aside>
 
-  <section class="min-w-0">
+  <section class="max-h-[calc(100dvh-7.5rem)] min-w-0 overflow-y-auto overscroll-contain pr-1">
     <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div>
         <h1 class="text-3xl font-bold tracking-normal text-slate-50"><%= @song.name %></h1>
@@ -151,7 +151,7 @@
           <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-300">Lyrics</h2>
           <%= link_to "✎ Edit Lyrics", edit_playlist_song_path(@playlist, @song), class: "link-edit text-sm" %>
         </div>
-        <pre data-lyrics-target="container" class="h-[24rem] overflow-y-auto whitespace-pre-wrap bg-slate-950/20 p-5 font-mono text-lg leading-8 text-slate-100 sm:text-xl"><%= @song.lyrics %></pre>
+        <pre data-lyrics-target="container" class="whitespace-pre-wrap bg-slate-950/20 p-5 font-mono text-lg leading-8 text-slate-100 sm:text-xl"><%= @song.lyrics %></pre>
       </div>
     <% end %>
 
