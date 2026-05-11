@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :playlists do
+    member do
+      post :duplicate
+    end
+
     resources :songs do
       member do
         patch :move_up

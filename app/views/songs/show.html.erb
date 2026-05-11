@@ -43,12 +43,20 @@
     </nav>
 
     <div class="mt-6 border-t border-slate-800 pt-4">
-      <%= link_to new_playlist_path, class: "mx-auto grid size-9 place-items-center rounded-lg border border-slate-700 bg-slate-950/30 text-slate-200 transition hover:border-sky-500/60 hover:bg-sky-500/10 hover:text-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400/40", title: "New Playlist", data: { playlist_rail_target: "collapsed" } do %>
-        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-        </svg>
-      <% end %>
-      <%= link_to "＋ New Playlist", new_playlist_path, class: "btn-outline hidden w-full justify-center", data: { playlist_rail_target: "expanded" } %>
+      <div class="flex flex-col gap-2">
+        <%= link_to new_playlist_path, class: "mx-auto grid size-9 place-items-center rounded-lg border border-slate-700 bg-slate-950/30 text-slate-200 transition hover:border-sky-500/60 hover:bg-sky-500/10 hover:text-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400/40", title: "New Playlist", data: { playlist_rail_target: "collapsed" } do %>
+          <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+          </svg>
+        <% end %>
+        <%= button_to duplicate_playlist_path(@playlist), method: :post, class: "grid size-9 place-items-center rounded-lg border border-slate-700 bg-slate-950/30 text-slate-200 transition hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-400/40", title: "Duplicate Playlist", form: { class: "mx-auto", data: { playlist_rail_target: "collapsed" } } do %>
+          <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M7 7V5.5C7 4.67 7.67 4 8.5 4H14.5C15.33 4 16 4.67 16 5.5V11.5C16 12.33 15.33 13 14.5 13H13M5.5 7H11.5C12.33 7 13 7.67 13 8.5V14.5C13 15.33 12.33 16 11.5 16H5.5C4.67 16 4 15.33 4 14.5V8.5C4 7.67 4.67 7 5.5 7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        <% end %>
+        <%= link_to "＋ New Playlist", new_playlist_path, class: "btn-outline hidden w-full justify-center", data: { playlist_rail_target: "expanded" } %>
+        <%= button_to "⧉ Duplicate Playlist", duplicate_playlist_path(@playlist), method: :post, class: "btn-outline w-full justify-center border-emerald-400/30 text-emerald-300 hover:bg-emerald-500/10 hover:text-emerald-200", form: { class: "hidden", data: { playlist_rail_target: "expanded" } } %>
+      </div>
     </div>
   </aside>
 

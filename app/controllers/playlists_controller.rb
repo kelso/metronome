@@ -1,5 +1,5 @@
 class PlaylistsController < ApplicationController
-  before_action :set_playlist, only: %i[show edit update destroy]
+  before_action :set_playlist, only: %i[show edit update destroy duplicate]
 
   def index
     @playlists = Playlist.all
@@ -35,6 +35,11 @@ class PlaylistsController < ApplicationController
   def destroy
     @playlist.destroy
     redirect_to playlists_path, notice: "Playlist deleted."
+  end
+
+  def duplicate
+    duplicated_playlist = @playlist.duplicate!
+    redirect_to duplicated_playlist, notice: "Playlist duplicated."
   end
 
   private
