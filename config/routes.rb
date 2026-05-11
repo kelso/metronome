@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       member do
         patch :move_up
         patch :move_down
+        patch :reorder
       end
 
       resources :assets do

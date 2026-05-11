@@ -1,6 +1,6 @@
 class SongsController < ApplicationController
   before_action :set_playlist
-  before_action :set_song, only: %i[show edit update destroy move_up move_down]
+  before_action :set_song, only: %i[show edit update destroy move_up move_down reorder]
 
   def show; end
 
@@ -40,6 +40,22 @@ class SongsController < ApplicationController
   def move_down
     @song.update row_order_position: :down
     redirect_to playlist_path(@playlist)
+  end
+
+  def reorder
+    position = Integer(params.require(:row_order_position))
+    raise ArgumentError if position.negative?
+
+    if @song.update(row_order_position: position)
+      respond_to do |format|
+        format.html { redirect_to playlist_song_path(@playlist, @song) }
+        format.json { head :no_content }
+      end
+    else
+      render json: { errors: @song.errors.full_messages }, status: :unprocessable_entity
+    end
+  rescue ArgumentError
+    render json: { errors: [ "Invalid song position" ] }, status: :unprocessable_entity
   end
 
   private

@@ -71,10 +71,20 @@
       </div>
     </div>
 
-    <div data-controller="current-song-list" class="min-h-0 flex-1 divide-y divide-slate-800 overflow-y-auto overscroll-contain">
+    <div data-controller="current-song-list playlist-sort" class="min-h-0 flex-1 divide-y divide-slate-800 overflow-y-auto overscroll-contain">
       <% playlist_songs.each_with_index do |song_item, index| %>
-        <%= link_to playlist_song_path(@playlist, song_item), class: "grid grid-cols-[2rem_1fr_3rem_3rem] items-center gap-2 px-4 py-3 text-sm transition hover:bg-slate-800/60 #{'bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-400/40' if song_item == @song}", data: (song_item == @song ? { current_song_list_target: "current" } : {}) do %>
-          <span class="text-slate-500"><%= index + 1 %></span>
+        <% song_list_data = {
+          playlist_sort_target: "item",
+          playlist_sort_song_id: song_item.id,
+          playlist_sort_song_url: playlist_song_path(@playlist, song_item),
+          playlist_sort_reorder_url: reorder_playlist_song_path(@playlist, song_item),
+          playlist_sort_original_position: index,
+          action: "dragstart->playlist-sort#dragStart dragover->playlist-sort#dragOver drop->playlist-sort#drop dragend->playlist-sort#dragEnd"
+        } %>
+        <% song_list_data[:current_song_list_target] = "current" if song_item == @song %>
+        <%= link_to playlist_song_path(@playlist, song_item), draggable: true, class: "song-sort-item grid grid-cols-[1.25rem_2rem_1fr_3rem_3rem] items-center gap-2 px-4 py-3 text-sm transition hover:bg-slate-800/60 #{'bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-400/40' if song_item == @song}", data: song_list_data do %>
+          <span class="song-sort-handle text-slate-600" aria-hidden="true">⋮⋮</span>
+          <span data-playlist-sort-target="position" class="text-slate-500"><%= index + 1 %></span>
           <span class="truncate font-medium"><%= song_item.name %></span>
           <span class="text-right text-slate-400"><%= song_item.bpm %></span>
           <span class="text-right text-slate-400"><%= song_item.time_signature.presence || "—" %></span>

@@ -139,6 +139,26 @@
     @apply border border-sky-400/40 bg-sky-500/15 font-semibold text-sky-100;
   }
 
+  .song-sort-item {
+    @apply cursor-grab select-none;
+  }
+
+  .song-sort-item:active {
+    @apply cursor-grabbing;
+  }
+
+  .song-sort-item-dragging {
+    @apply opacity-60 ring-1 ring-inset ring-sky-400/50;
+  }
+
+  .song-sort-item-saving {
+    @apply pointer-events-none;
+  }
+
+  .song-sort-handle {
+    @apply text-center text-base leading-none;
+  }
+
   .metric-tile {
     @apply rounded-lg border border-slate-800 bg-slate-950/40 px-4 py-3;
   }
